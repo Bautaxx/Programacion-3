@@ -199,4 +199,10 @@ public class ListaGenericaEnlazada<T> extends ListaGenerica<T> {
         }
 
     }
+    //Metodo para frontera() de arboles binarios
+    public void agregarLista(ListaGenerica<T> l) {
+        while(!l.fin()){
+            this.agregarFinal(l.proximo());
+        }
+    }
 }

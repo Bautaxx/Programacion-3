@@ -91,5 +91,7 @@ public abstract class 	ListaGenerica<T> {
 	 * la lista
 	 * */
 	public abstract int tamanio();
+	public abstract void agregarLista(ListaGenerica<T> l);
+
 
 }

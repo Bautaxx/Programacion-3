@@ -102,13 +102,25 @@ public class ArbolBinario<T> {
 	}
 
 	// imprime el arbol en postorden
-	public void printInorden() {
-		
+	public void printInorden(ArbolBinario <T> arbol) {
+		if(arbol.tieneHijoIzquierdo()){
+			printInorden(arbol.getHijoIzquierdo());
+		}
+		System.out.println(arbol.getDato());
+		if(arbol.tieneHijoDerecho()){
+			printInorden(arbol.getHijoDerecho());
+		}
 	}
-	
+
 	// imprime el arbol en postorden
-	public void printPostorden() {
-		
+	public void printPostorden(ArbolBinario <T> arbol) {
+		if(arbol.tieneHijoIzquierdo()){
+			printPostorden(arbol.getHijoIzquierdo());
+		}
+		if(arbol.tieneHijoDerecho()){
+			printPostorden(arbol.getHijoDerecho());
+		}
+		System.out.println(arbol.getDato());
 	}
 
 
@@ -116,19 +128,54 @@ public class ArbolBinario<T> {
 		
 	}
 
+
 	
 
-	public ListaGenerica<T> frontera() {
+	public ListaGenerica<T> frontera() { //Con recorrido post-orden
 		ListaGenerica<T> l = new ListaGenericaEnlazada<T>();
-
+		if(this.tieneHijoIzquierdo()){
+			l.agregarLista(this.getHijoIzquierdo().frontera());
+		}
+		if(this.tieneHijoDerecho()){
+			l.agregarLista(this.getHijoDerecho().frontera());
+		}
+		if(esHoja()){
+			l.agregarFinal(this.getDato());
+		}
+		return l;
+	}
+	/*//Alternativa mas eficiente pasando parametros
+	public ListaGenerica<T> frontera(ListaGenerica<T> l) { //Con recorrido post-orden
+		if(this.tieneHijoIzquierdo()){
+			this.getHijoIzquierdo().frontera(l);
+		}
+		if(this.tieneHijoDerecho()){
+			this.getHijoDerecho().frontera(l);
+		}
+		if(!this.tieneHijoDerecho() && !this.tieneHijoIzquierdo()){
+			l.agregarFinal(this.getDato());
+		}
 		return l;
 	}
 
-	
+	*/
 	
 	
 	public int contarHojas() {
-		return 0;
+		int res = 0;
+		//Caso base (no tiene hijo izquierdo ni hijo derecho) debo aumentar cantHojas
+		if(!this.tieneHijoDerecho() && !this.tieneHijoIzquierdo()){
+			return 1;
+		}
+		//Funciona ya que al llamar contarHojas sobre otro arbol se actualiza el this.
+		if(this.tieneHijoIzquierdo()){
+			res += this.getHijoIzquierdo().contarHojas();
+		}
+		if(this.tieneHijoDerecho()){
+			res += this.getHijoDerecho().contarHojas();
+		}
+		return res;
+
 	}
 
 	
