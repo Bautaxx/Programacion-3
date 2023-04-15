@@ -1,6 +1,9 @@
 package prog3.arbol;
 
+import prog3.colagenerica.Cola;
 import prog3.listagenerica.*;
+
+import java.awt.*;
 
 public class ArbolBinario<T> {
 	private T dato;
@@ -80,9 +83,6 @@ public class ArbolBinario<T> {
 
 	
 
-	public boolean esLleno() {
-		return false;
-	}
 
 	 boolean esCompleto() {
 		return false;
@@ -125,7 +125,15 @@ public class ArbolBinario<T> {
 
 
 	public void recorridoPorNiveles() {
-		
+		Cola <ArbolBinario> c = new Cola<ArbolBinario>();
+		c.encolar(this);
+		while(!c.esVacia()){
+			ArbolBinario actual = c.desencolar();
+			System.out.println(actual.getDato());
+			if(actual.tieneHijoIzquierdo()) c.encolar(actual.getHijoIzquierdo());
+			if(actual.tieneHijoDerecho()) c.encolar(actual.getHijoDerecho());
+		}
+		return;
 	}
 
 
@@ -177,6 +185,85 @@ public class ArbolBinario<T> {
 		return res;
 
 	}
+	private class Dimensiones {
+		private int nodos;
+		private int alturaIzq;
+		private int alturaDer;
+		private int altura;
+		public Dimensiones (int nodos, int alturaDer, int alturaIzq) {
+			this.nodos = nodos;
+			this.alturaDer = alturaDer;
+			this.alturaIzq = alturaIzq;
+		}
+
+		public void setAltura(int altura) {
+			this.altura = altura;
+		}
+
+		public int getAltura() {
+			return altura;
+		}
+
+		public int getAlturaDer() {
+			return alturaDer;
+		}
+
+		public int getAlturaIzq() {
+			return alturaIzq;
+		}
+
+		public void setAlturaDer(int alturaDer) {
+			this.alturaDer = alturaDer;
+		}
+
+		public void setAlturaIzq(int alturaIzq) {
+			this.alturaIzq = alturaIzq;
+		}
+
+		public void incAlturaIzq(){
+			this.alturaIzq ++;
+
+		}
+		public void incAlturaDer(){
+			this.alturaDer ++;
+
+		}
+
+		public void incNodos(){
+			this.nodos ++;
+			return;
+		}
+
+		public int getNodos() {
+			return nodos;
+		}
+
+		public void setNodos(int nodos) {
+			this.nodos = nodos;
+		}
+		public void dimensionesArbol(ArbolBinario <T> a){
+			this.incNodos();
+			if(a.tieneHijoIzquierdo()){
+				this.incAlturaIzq();
+			}
+			if(a.tieneHijoDerecho()){
+				this.incAlturaDer();
+			}
+		}
+	}
+	public boolean esLleno(){
+		if(this.esVacio())return false;
+		else return this.esLlenoAux(this);
+	}
+	public boolean esLlenoAux(ArbolBinario <T> a){
+		Dimensiones dim = new Dimensiones(0,0,0);
+		dim.dimensionesArbol(a);
+		dim.setAltura(dim.getAlturaIzq() >= dim.getAlturaDer() ? dim.getAlturaIzq() : dim.getAlturaDer());
+		if(dim.getNodos() == Math.pow(2, dim.getAltura() + 1) - 1) return true;
+		else return false;
+	}
+
+
 
 	
 

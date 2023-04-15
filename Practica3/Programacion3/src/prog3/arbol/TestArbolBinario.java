@@ -1,5 +1,6 @@
 package prog3.arbol;
 
+import prog3.arbol.binario.util.Utiles;
 import prog3.listagenerica.ListaGenerica;
 import prog3.listagenerica.ListaGenericaEnlazada;
 
@@ -16,15 +17,14 @@ public class TestArbolBinario {
         arbolBinarioB.agregarHijoIzquierdo(hijoIzquierdoB);
         arbolBinarioB.agregarHijoDerecho(hijoDerechoB);
 
-        System.out.println("Recorrido en orden: ");
-        arbolBinarioB.printInorden(arbolBinarioB);
-        System.out.println("Recorrido en pre-orden: ");
-        arbolBinarioB.printPreorden(arbolBinarioB);
+        /*System.out.println("Recorrido en orden: ");
         System.out.println("Recorrido en post-orden: ");
         arbolBinarioB.printPostorden(arbolBinarioB);
         System.out.println("Hojas de arbol binario b = " + arbolBinarioB.contarHojas());
+        arbolBinarioB.printInorden(arbolBinarioB);
+        System.out.println("Recorrido en pre-orden: ");
+        arbolBinarioB.printPreorden(arbolBinarioB);*/
 
-        System.out.println(arbolBinarioB.frontera().toString());
-    }
+        }
 
 }
