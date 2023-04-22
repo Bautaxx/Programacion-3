@@ -17,13 +17,13 @@ public class TestArbolBinario {
         arbolBinarioB.agregarHijoIzquierdo(hijoIzquierdoB);
         arbolBinarioB.agregarHijoDerecho(hijoDerechoB);
 
-        /*System.out.println("Recorrido en orden: ");
+        System.out.println("Recorrido en orden: ");
         System.out.println("Recorrido en post-orden: ");
         arbolBinarioB.printPostorden(arbolBinarioB);
         System.out.println("Hojas de arbol binario b = " + arbolBinarioB.contarHojas());
         arbolBinarioB.printInorden(arbolBinarioB);
         System.out.println("Recorrido en pre-orden: ");
-        arbolBinarioB.printPreorden(arbolBinarioB);*/
+        arbolBinarioB.printPreorden(arbolBinarioB);
 
         }
 
