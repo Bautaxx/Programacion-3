@@ -1,4 +1,4 @@
-package prog3.grafos.Ejercicios;
+package prog3.grafos.utiles;
 
 import prog3.grafos.Arista;
 import prog3.grafos.Grafo;
@@ -11,7 +11,7 @@ public class Mapa {
 
     private Grafo<String> mapaCiudades;
 
-    public Mapa(Grafo<String> mapaCiudades){
+    public Mapa(Grafo<String> mapaCiudades) {
         this.mapaCiudades = mapaCiudades;
     }
 
@@ -59,13 +59,13 @@ public class Mapa {
     }
 
 
-    private void clonarLista(ListaGenerica<String> origen, ListaGenerica<String> destino){
-        while(destino.tamanio() != 0){
+    private void clonarLista(ListaGenerica<String> origen, ListaGenerica<String> destino) {
+        while (destino.tamanio() != 0) {
             destino.eliminarEn(0);
         }
         destino.comenzar();
         origen.comenzar();
-        while(!origen.fin()){
+        while (!origen.fin()) {
             destino.agregarFinal(origen.proximo());
         }
     }
@@ -144,7 +144,7 @@ public class Mapa {
         visitados[inicio.posicion()] = true;
         caminoAct.agregarFinal(inicio.dato()); //Agrego a caminoact el vertice actual
         //System.out.println("Camino actual" + caminoAct);
-        if (inicio.dato().equals(destino) && (caminoRes.esVacia() || caminoRes.tamanio() > caminoAct.tamanio()) ) { //Falta condicion para chequear tamanio
+        if (inicio.dato().equals(destino) && (caminoRes.esVacia() || caminoRes.tamanio() > caminoAct.tamanio())) { //Falta condicion para chequear tamanio
             System.out.println("Destino encontrado");
             this.clonarLista(caminoAct, caminoRes); //Clono camino actual en caso de encontrar camino
         }
@@ -160,8 +160,57 @@ public class Mapa {
         }
         visitados[inicio.posicion()] = false; //Desmarco ya que ese vertice puede estar presente en otro camino
         caminoAct.eliminarEn(caminoAct.tamanio() - 1); //Borro luego de visitar todos los ady
+
+
     }
 
+    public ListaGenerica<String> caminoSinCombustible(String ciudad1, String ciudad2, int tanque) {
+        ListaGenerica<String> caminoRes = new ListaGenericaEnlazada<String>();
+        if (this.mapaCiudades != null && !this.mapaCiudades.esVacio()) {
+            boolean[] visitados = new boolean[mapaCiudades.listaDeVertices().tamanio()];
+            ListaGenerica<Vertice<String>> vertices = mapaCiudades.listaDeVertices();
+            vertices.comenzar();
+            Vertice<String> inicio = null;
+            while (inicio == null && !vertices.fin()) {
+                Vertice<String> vertice = vertices.proximo();
+                if (vertice.dato().equals(ciudad1)) {
+                    inicio = vertice;
+                }
+            }
+            if (inicio != null) {
+                ListaGenerica<String> caminoAct = new ListaGenericaEnlazada<String>();
+                dfsSinCombustible(inicio, visitados, caminoAct, caminoRes, ciudad2, tanque); //DFS con lista de camino actual y camino resultado
 
+            }
+
+        }
+        System.out.println(caminoRes);
+        return caminoRes;
+    }
+
+    private void dfsSinCombustible(Vertice<String> inicio, boolean[] visitados, ListaGenerica<String> caminoAct, ListaGenerica<String> caminoRes, String destino, int tanque) {
+        visitados[inicio.posicion()] = true;
+        int combusArista = 0;
+        caminoAct.agregarFinal(inicio.dato()); //Agrego a caminoact el vertice actual
+        //System.out.println("Camino actual" + caminoAct);
+        if (inicio.dato().equals(destino) && (caminoRes.esVacia() || caminoRes.tamanio() > caminoAct.tamanio())) { //Falta condicion para chequear tamanio
+            System.out.println("Destino encontrado");
+            this.clonarLista(caminoAct, caminoRes); //Clono camino actual en caso de encontrar camino
+        }
+        System.out.println("Lista resultado: " + caminoRes);
+
+        ListaGenerica<Arista<String>> ady = mapaCiudades.listaDeAdyacentes(inicio);
+        ady.comenzar();
+        while (!ady.fin()) {
+            combusArista = ady.proximo().peso();
+            int j = ady.proximo().verticeDestino().posicion();
+
+            if (!visitados[j] && (tanque - combusArista) >= 0) {
+                this.dfsSinCombustible(mapaCiudades.vertice(j), visitados, caminoAct, caminoRes, destino, tanque - combusArista);
+            }
+        }
+        visitados[inicio.posicion()] = false; //Desmarco ya que ese vertice puede estar presente en otro camino
+        caminoAct.eliminarEn(caminoAct.tamanio() - 1); //Borro luego de visitar todos los ady
+    }
 
 }

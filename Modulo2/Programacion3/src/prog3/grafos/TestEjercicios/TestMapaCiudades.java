@@ -1,6 +1,6 @@
 package prog3.grafos.TestEjercicios;
 
-import prog3.grafos.Ejercicios.Mapa;
+import prog3.grafos.utiles.Mapa;
 import prog3.grafos.Grafo;
 import prog3.grafos.GrafoImplListAdy;
 import prog3.grafos.Vertice;
