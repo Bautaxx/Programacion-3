@@ -39,9 +39,9 @@ public class Delta {
         return max;
     }
 
-    //Funciona bien
+    //Funciona bien usando aristas para medir distancias
     public RutaMinima caminoMasCorto(Grafo<String> grafo, String islaO, String islaD) {
-        RutaMinima respuesta = new RutaMinima(true);
+        RutaMinima respuesta = new RutaMinima(true, Integer.MAX_VALUE);
         if (grafo != null && !grafo.esVacio()) {
             boolean[] visitados = new boolean[grafo.listaDeVertices().tamanio()];
             //ListaGenerica<Vertice<String>> vertices = grafo.listaDeVertices();
@@ -49,28 +49,33 @@ public class Delta {
             verticeInicial = buscarVertice(islaO, grafo);
             ListaGenerica<String> caminoActual = new ListaGenericaEnlazada<>();
             ListaGenerica<String> caminoCorto = new ListaGenericaEnlazada<>();
-            this.dfsMasCorto(grafo, visitados, verticeInicial, respuesta, islaD, caminoActual, caminoCorto);
+            this.dfsMasCorto(grafo, visitados, verticeInicial, respuesta, islaD, caminoActual, caminoCorto, 0);
             respuesta.setCaminoMinimo(caminoCorto);
-            if(caminoCorto.incluye("Muelle Principal"))respuesta.setBoletoUnico(false);
+            if (caminoCorto.incluye("Muelle Principal")) respuesta.setBoletoUnico(false);
         }
         return respuesta;
     }
 
-    private void dfsMasCorto(Grafo<String> grafo, boolean[] visitados, Vertice<String> actual, RutaMinima res, String destino, ListaGenerica<String> caminoActual, ListaGenerica<String> caminoCorto) {
+    private void dfsMasCorto(Grafo<String> grafo, boolean[] visitados, Vertice<String> actual, RutaMinima res, String destino, ListaGenerica<String> caminoActual, ListaGenerica<String> caminoCorto, int peso) {
         visitados[actual.posicion()] = true;
         caminoActual.agregarFinal(actual.dato());
-        if ((actual.dato().equals(destino)) && (caminoCorto.esVacia() || caminoActual.tamanio() > caminoCorto.tamanio())) {
+        if ((actual.dato().equals(destino)) && (peso < res.getDistancia())) {
+            //System.out.println("Encontro el camino " + caminoActual);
             clonarLista(caminoActual, caminoCorto);
+            res.setDistancia(peso);
         }
         ListaGenerica<Arista<String>> ady = grafo.listaDeAdyacentes(actual);
         ady.comenzar();
         while (!ady.fin()) {
-            int j = ady.proximo().verticeDestino().posicion();
+            Arista<String> a = ady.proximo();
+            int j = a.verticeDestino().posicion();
             if (!visitados[j]) {
-                this.dfsMasCorto(grafo, visitados, grafo.vertice(j), res, destino, caminoActual, caminoCorto);
+                int pesoActual = a.peso();
+                this.dfsMasCorto(grafo, visitados, grafo.vertice(j), res, destino, caminoActual, caminoCorto, peso + pesoActual);
             }
         }
         visitados[actual.posicion()] = false;
+        caminoActual.eliminarEn(caminoActual.tamanio() - 1);
     }
 
     public Vertice<String> buscarVertice(String vertice, Grafo<String> grafo) {

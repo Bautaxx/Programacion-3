@@ -33,26 +33,28 @@ public class TestDelta {
         grafo.agregarVertice(islaF);
 
         // Conectar las islas entre sí (conexiones bidireccionales)
-        grafo.conectar(muellePrincipal, islaA);
-        grafo.conectar(islaA, muellePrincipal);
-        grafo.conectar(muellePrincipal, islaB);
-        grafo.conectar(islaB, muellePrincipal);
-//        grafo.conectar(islaA, islaC);
-//        grafo.conectar(islaC, islaA);
-        grafo.conectar(islaB, islaD);
-        grafo.conectar(islaD, islaB);
+        grafo.conectar(muellePrincipal, islaA, 4);
+        grafo.conectar(islaA, muellePrincipal, 4);
+        grafo.conectar(muellePrincipal, islaD, 4);
+        grafo.conectar(islaD, muellePrincipal, 4);
+        grafo.conectar(islaD, islaB, 5);
+        grafo.conectar(islaB, islaD, 5);
+        grafo.conectar(islaA, islaB, 5);
+        grafo.conectar(islaB, islaA, 5);
+//        grafo.conectar(islaB, islaD);
+//        grafo.conectar(islaD, islaB);
 //        grafo.conectar(islaC, islaE);
 //        grafo.conectar(islaE, islaC);
 //        grafo.conectar(islaD, islaE);
 //        grafo.conectar(islaE, islaD);
-        grafo.conectar(islaD, islaF);
-        grafo.conectar(islaF, islaD);
+//        grafo.conectar(islaD, islaF);
+//        grafo.conectar(islaF, islaD);
 
         Delta delta = new Delta();
         //System.out.println("Maximas islas distintas: " + delta.maxIslasDistintas(grafo));
         RutaMinima rutMin = new RutaMinima();
-        rutMin = delta.caminoMasCorto(grafo, "Isla A", "Isla B");
-        System.out.println("Camino mas corto de A a B: " + rutMin.getCaminoMinimo().toString() + "\nSe puede acceder con un unico boleto: " + rutMin.isBoletoUnico());
+        rutMin = delta.caminoMasCorto(grafo, "Isla A", "Isla D");
+        System.out.println("Camino mas corto de A a D: " + rutMin.getCaminoMinimo().toString() + "\nSe puede acceder con un unico boleto: " + rutMin.isBoletoUnico());
 
     }
 }
